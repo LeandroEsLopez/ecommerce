@@ -1,0 +1,73 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - ecommerce-network 
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - ecommerce-network 
+
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    ports:
+      - '3001:3001'
+    depends_on:
+      - mongodb
+      - rabbitmq
+    env_file: ./user-service/.env
+    networks:
+      - ecommerce-network
+
+  product-service:
+    build: ./product-service
+    container_name: product-service
+    ports:
+      - '3002:3002'
+    depends_on:
+      - mongodb
+    env_file: ./product-service/.env
+    networks:
+      - ecommerce-network
+
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    ports:
+      - '3003:3003'
+    depends_on:
+      - mongodb
+    env_file: ./order-service/.env
+    networks:
+      - ecommerce-network
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - user-service
+      - product-service
+      - order-service  
+    networks:
+      - ecommerce-network  
+
+networks:
+  ecommerce-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
