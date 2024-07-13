@@ -5,9 +5,9 @@ const productRoutes = require('./productRoutes');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3003;
+const port = process.env.PRODUCT_PORT || 3003;
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.PRODUCT_MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(bodyParser.json());
 app.use('/api/products', productRoutes);

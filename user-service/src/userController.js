@@ -5,7 +5,7 @@ const connectToRabbitMQ = (callback) => {
   const retryInterval = 5000; // Intervalo de reintento en milisegundos
 
   const tryConnect = () => {
-    amqp.connect(process.env.RABBITMQ_URL, (error0, connection) => {
+    amqp.connect(process.env.USER_RABBITMQ_URL, (error0, connection) => {
       if (error0) {
         console.error('RabbitMQ connection error:', error0);
         setTimeout(tryConnect, retryInterval);
@@ -27,7 +27,7 @@ const register = async (req, res) => {
         if (error1) {
           throw error1;
         }
-        const queue = process.env.RABBITMQ_QUEUE;
+        const queue = process.env.USER_RABBITMQ_QUEUE;
         const msg = JSON.stringify(user);
 
         channel.assertQueue(queue, {
