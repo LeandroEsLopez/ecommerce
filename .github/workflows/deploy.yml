@@ -1,0 +1,29 @@
+name: CI/CD to Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and push Docker images
+        env:
+          RENDER_USERNAME: ${{ secrets.RENDER_USERNAME }}
+          RENDER_PASSWORD: ${{ secrets.RENDER_PASSWORD }}
+        run: |
+          docker-compose build
+          docker-compose push
+
+      - name: Deploy to Render
+        env:
+          RENDER_USERNAME: ${{ secrets.RENDER_USERNAME }}
+          RENDER_PASSWORD: ${{ secrets.RENDER_PASSWORD }}
+        run: |
+          render deploy -- --branch main
