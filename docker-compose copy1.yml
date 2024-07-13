@@ -1,6 +1,15 @@
 version: '3'
 services:
-  
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - ecommerce-network 
+
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
@@ -18,7 +27,6 @@ services:
     depends_on:
       - mongodb
       - rabbitmq
-    env_file: ./user-service/.env
     networks:
       - ecommerce-network
 
@@ -29,7 +37,6 @@ services:
       - '3002:3002'
     depends_on:
       - mongodb
-    env_file: ./product-service/.env
     networks:
       - ecommerce-network
 
@@ -40,7 +47,6 @@ services:
       - '3003:3003'
     depends_on:
       - mongodb
-    env_file: ./order-service/.env
     networks:
       - ecommerce-network
 
