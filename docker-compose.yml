@@ -17,7 +17,6 @@ services:
       - '3001:3001'
     depends_on:
       - rabbitmq
-    env_file: ./user-service/.env
     networks:
       - ecommerce-network
 
@@ -26,7 +25,6 @@ services:
     container_name: product-service
     ports:
       - '3002:3002'
-    env_file: ./product-service/.env
     networks:
       - ecommerce-network
 
@@ -35,7 +33,6 @@ services:
     container_name: order-service
     ports:
       - '3003:3003'
-    env_file: ./order-service/.env
     networks:
       - ecommerce-network
 
